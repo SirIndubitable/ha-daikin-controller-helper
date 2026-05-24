@@ -21,9 +21,7 @@ from .const import (
     CONF_CLIMATE_ENTITY,
     CONF_DUR_COOLDOWN,
     CONF_INITIAL_HVAC_MODE,
-    CONF_MAX_TEMP,
     CONF_MIN_DUR,
-    CONF_MIN_TEMP,
     CONF_OFF_TOLERANCE,
     CONF_ON_TOLERANCE,
     CONF_PRECISION,
@@ -68,16 +66,6 @@ OPTIONS_SCHEMA = {
                 selector.SelectOptionDict(value=HVACMode.HEAT, label="Heat"),
                 selector.SelectOptionDict(value=HVACMode.OFF, label="Off"),
             ]
-        )
-    ),
-    vol.Optional(CONF_MIN_TEMP): selector.NumberSelector(
-        selector.NumberSelectorConfig(
-            mode=selector.NumberSelectorMode.BOX, unit_of_measurement=DEGREE, step=0.1
-        )
-    ),
-    vol.Optional(CONF_MAX_TEMP): selector.NumberSelector(
-        selector.NumberSelectorConfig(
-            mode=selector.NumberSelectorMode.BOX, unit_of_measurement=DEGREE, step=0.1
         )
     ),
     vol.Optional(CONF_PRECISION): selector.NumberSelector(
