@@ -310,6 +310,12 @@ class DaikinControllerClimateEntity(ClimateEntity, RestoreEntity):
             ):
                 self._attr_target_temperature_low = self.min_temp
 
+            _LOGGER.debug(
+                "Loaded as initial state: target_low=%s, target_high=%s, hvac_mode=%s",
+                self.target_temperature_low,
+                self.target_temperature_high,
+                self.hvac_mode,
+            )
             self._initialized = True
 
         if self.hass.state is CoreState.running:
@@ -331,13 +337,6 @@ class DaikinControllerClimateEntity(ClimateEntity, RestoreEntity):
 
         if not hasattr(self, "_attr_hvac_mode") or self._attr_hvac_mode is None:
             self._attr_hvac_mode = self._initial_hvac_mode
-
-        _LOGGER.debug(
-            "Loaded as initial state: target_low=%s, target_high=%s, hvac_mode=%s",
-            self.target_temperature_low,
-            self.target_temperature_high,
-            self.hvac_mode,
-        )
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
         """Set hvac mode."""
