@@ -1,0 +1,7 @@
+{
+  "name": "Daikin Controller Helper",
+  "domains": [
+    "climate"
+  ],
+  "homeassistant": "2026.05.0"
+}

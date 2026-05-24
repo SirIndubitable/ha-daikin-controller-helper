@@ -1,0 +1,17 @@
+{
+  "domain": "custom_daikin",
+  "name": "Daikin Controller Helper",
+  "codeowners": [
+    "@sirindubitable"
+  ],
+  "integration_type": "helper",
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://www.home-assistant.io/integrations/custom_daikin",
+  "homekit": {},
+  "iot_class": "calculated",
+  "requirements": [],
+  "ssdp": [],
+  "zeroconf": [],
+  "version": "0.0.1"
+}
