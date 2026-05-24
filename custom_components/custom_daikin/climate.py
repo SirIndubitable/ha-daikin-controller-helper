@@ -245,6 +245,11 @@ class DaikinControllerClimateEntity(ClimateEntity, RestoreEntity):
         self._initialized = False
         self._entity_temperature_unit = None
 
+        self._attr_min_temp = None
+        self._attr_max_temp = None
+        self._attr_target_temperature_low = None
+        self._attr_target_temperature_high = None
+
     async def async_added_to_hass(self) -> None:
         """Run when entity about to be added."""
         await super().async_added_to_hass()
@@ -363,8 +368,6 @@ class DaikinControllerClimateEntity(ClimateEntity, RestoreEntity):
 
     async def async_set_temperature(self, **kwargs: Any) -> None:
         """Set new target temperature."""
-        # if (temperature := kwargs.get(ATTR_TEMPERATURE)) is not None:
-        #     self._attr_target_temperature = temperature
         _LOGGER.debug(
             "Target temperature updated to: {%s}",
             ", ".join([f"{k}={v!r}" for k, v in kwargs.items()]),
