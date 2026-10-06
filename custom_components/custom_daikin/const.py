@@ -1,4 +1,4 @@
-"""Constants for the My Daikin Controller integration."""
+"""Constants for the My Climate Controller integration."""
 
 from homeassistant.const import (
     CONF_NAME,  # noqa: F401
@@ -21,5 +21,5 @@ CONF_TEMP_SENSOR = "temperature_sensor"
 CONF_PRECISION = "precision"
 CONF_TEMP_STEP = "target_temp_step"
 
-DEFAULT_NAME = "Daikin Thermostat Controller"
+DEFAULT_NAME = "Custom Thermostat Controller"
 DEFAULT_TOLERANCE = 0.3

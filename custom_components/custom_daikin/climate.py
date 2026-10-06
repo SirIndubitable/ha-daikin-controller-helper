@@ -77,7 +77,6 @@ from .const import (
 )
 
 _LOGGER = logging.getLogger(__name__)
-_LOGGER.level = logging.DEBUG
 
 
 PLATFORM_SCHEMA_COMMON = vol.Schema(
@@ -510,11 +509,12 @@ class DaikinControllerClimateEntity(ClimateEntity, RestoreEntity):
             too_hot = (
                 self.target_temperature_high + self._on_tolerance
             ) < self.current_temperature
-            just_right = (
-                (self.target_temperature_low + self._off_tolerance)
-                <= self.current_temperature
-                <= (self.target_temperature_high - self._off_tolerance)
-            )
+            just_right_heating = (
+                self.target_temperature_low + self._off_tolerance
+            ) <= self.current_temperature
+            just_right_cooling = (
+                self.target_temperature_high - self._off_tolerance
+            ) >= self.current_temperature
 
             now = dt_util.utcnow()
 
@@ -580,7 +580,8 @@ class DaikinControllerClimateEntity(ClimateEntity, RestoreEntity):
                 _LOGGER.debug("Currently too hot but cooling, nothing to do")
 
             elif (
-                just_right
+                (just_right_heating and self.hvac_action == HVACAction.HEATING)
+                or (just_right_cooling and self.hvac_action == HVACAction.COOLING)
                 or (
                     self.hvac_action == HVACAction.HEATING
                     and self.hvac_mode not in [HVACMode.HEAT, HVACMode.HEAT_COOL]
@@ -590,7 +591,7 @@ class DaikinControllerClimateEntity(ClimateEntity, RestoreEntity):
                     and self.hvac_mode not in [HVACMode.COOL, HVACMode.HEAT_COOL]
                 )
             ):
-                _LOGGER.debug("Turning off heater %s", self.climate_entity_id)
+                _LOGGER.debug("Turning off HCAV %s", self.climate_entity_id)
                 await self._async_set_climate_hvac_mode(HVACMode.OFF)
 
             elif too_cold and self.hvac_mode in [
@@ -642,7 +643,7 @@ class DaikinControllerClimateEntity(ClimateEntity, RestoreEntity):
 
         if hvac_mode in [HVACMode.HEAT, HVACMode.COOL]:
             data[ATTR_TEMPERATURE] = (
-                self.min_temp if hvac_mode == HVACMode.COOL else self.max_temp
+                self._attr_target_temperature_high if hvac_mode == HVACMode.COOL else self._attr_target_temperature_low
             )
             if (
                 self._entity_temperature_unit is not None

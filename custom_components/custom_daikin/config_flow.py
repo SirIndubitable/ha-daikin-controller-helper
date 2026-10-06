@@ -1,4 +1,4 @@
-"""Config flow for the My Daikin Controller integration."""
+"""Config flow for the My Climate Controller integration."""
 
 from collections.abc import Mapping
 from typing import Any, cast
@@ -110,7 +110,7 @@ OPTIONS_FLOW: dict[str, SchemaFlowFormStep | SchemaFlowMenuStep] = {
 
 
 class ConfigFlowHandler(SchemaConfigFlowHandler, domain=DOMAIN):
-    """Handle a config or options flow for My Daikin Controller."""
+    """Handle a config or options flow for My Climate Controller."""
 
     config_flow = CONFIG_FLOW
     options_flow = OPTIONS_FLOW

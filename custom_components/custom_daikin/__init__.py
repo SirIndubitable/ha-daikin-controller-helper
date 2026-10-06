@@ -10,7 +10,7 @@ from .const import CONF_CLIMATE_ENTITY, CONF_TEMP_SENSOR
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up My Daikin Controller from a config entry."""
+    """Set up My Climate Controller from a config entry."""
 
     async def async_hvac_updated(
         event: Event[er.EventEntityRegistryUpdatedData],

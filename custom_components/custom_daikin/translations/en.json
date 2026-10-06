@@ -2,7 +2,7 @@
   "config": {
     "step": {
       "user": {
-        "description": "Create a new Daikin climate controller",
+        "description": "Create a new climate controller",
         "data": {
           "climate_entity": "Source climate entity",
           "temperature_sensor": "Temperature sensor",
