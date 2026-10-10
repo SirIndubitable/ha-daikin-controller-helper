@@ -386,15 +386,18 @@ class DaikinControllerClimateEntity(ClimateEntity, RestoreEntity):
         await self._async_control_hvac(from_user=True)
         self.async_write_ha_state()
 
+    @callback
     async def _async_temperature_changed(
         self, event: Event[EventStateChangedData]
     ) -> None:
         """Handle temperature changes."""
-        new_state = event.data["new_state"]
+        old_state: State | None = event.data.get("old_state")
+        new_state: State | None = event.data.get("new_state")
         if (
             not self._initialized
             or new_state is None
-            or new_state.state in (STATE_UNAVAILABLE, STATE_UNKNOWN)
+            or old_state is None
+            or old_state.state in (STATE_UNAVAILABLE, STATE_UNKNOWN)
         ):
             return
 
@@ -424,6 +427,7 @@ class DaikinControllerClimateEntity(ClimateEntity, RestoreEntity):
         except ValueError as ex:
             _LOGGER.error("Unable to update from sensor: %s", ex)
 
+    @callback
     async def _async_climate_action_changed(
         self, event: Event[EventStateChangedData]
     ) -> None:
@@ -447,7 +451,6 @@ class DaikinControllerClimateEntity(ClimateEntity, RestoreEntity):
 
         self.async_write_ha_state()
 
-    @callback
     def _async_update_hvac_action(self, state: State) -> None:
         _LOGGER.debug(
             "Daikin updated to: %s, [%s]",
@@ -467,8 +470,12 @@ class DaikinControllerClimateEntity(ClimateEntity, RestoreEntity):
                     self._attr_hvac_action = HVACAction.HEATING
                 case HVACMode.COOL:
                     self._attr_hvac_action = HVACAction.COOLING
+                case HVACMode.FAN_ONLY:
+                    self._attr_hvac_action = HVACAction.FAN
+                case HVACMode.DRY:
+                    self._attr_hvac_action = HVACAction.DRYING
                 case _:
-                    self._attr_hvac_action = HVACAction.UNAVAILABLE
+                    self._attr_hvac_action = HVACAction.IDLE
         except ValueError as ex:
             _LOGGER.error("Unable to update from climate entity: %s", ex)
 
